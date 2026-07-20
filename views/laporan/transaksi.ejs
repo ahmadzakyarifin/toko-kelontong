@@ -1,0 +1,49 @@
+<%- include('/partials/navbar.ejs') %>
+<main class="max-w-6xl mx-auto px-4 py-6">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-lg font-bold text-slate-800">📋 Daftar Transaksi</h1>
+    <a href="/laporan" class="text-sm text-brand-600 hover:underline">← Kembali ke Laporan</a>
+  </div>
+
+  <form method="GET" class="mb-4 flex gap-2 items-end">
+    <div>
+      <label class="block text-xs text-slate-500 mb-1">Dari</label>
+      <input type="date" name="from" value="<%= from || '' %>" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+    </div>
+    <div>
+      <label class="block text-xs text-slate-500 mb-1">Sampai</label>
+      <input type="date" name="to" value="<%= to || '' %>" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+    </div>
+    <button class="bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm">Filter</button>
+  </form>
+
+  <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50 text-slate-500">
+        <tr>
+          <th class="text-left px-4 py-3">Kode</th>
+          <th class="text-left px-4 py-3">Waktu</th>
+          <th class="text-left px-4 py-3">Kasir</th>
+          <th class="text-right px-4 py-3">Total</th>
+          <th class="text-center px-4 py-3">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% if (rows.length === 0) { %>
+          <tr><td colspan="5" class="text-center text-slate-400 py-6">Belum ada transaksi</td></tr>
+        <% } %>
+        <% rows.forEach(t => { %>
+          <tr class="hover:bg-slate-50">
+            <td class="px-4 py-3 font-mono text-xs"><%= t.kode %></td>
+            <td class="px-4 py-3 text-slate-600"><%= new Date(t.created_at).toLocaleString('id-ID') %></td>
+            <td class="px-4 py-3 text-slate-600"><%= t.nama_kasir %></td>
+            <td class="px-4 py-3 text-right text-slate-700"><%= formatRupiah(t.total) %></td>
+            <td class="px-4 py-3 text-center"><a href="/transaksi/struk/<%= t.id %>" class="text-blue-600 hover:underline text-xs">Struk</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

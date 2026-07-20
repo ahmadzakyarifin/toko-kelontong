@@ -1,0 +1,21 @@
+<nav class="bg-white border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 font-bold text-slate-800">
+      <span class="text-xl">🛒</span> KasirToko
+    </a>
+    <div class="flex items-center gap-3 text-sm">
+      <span class="text-slate-500">Hai, <b class="text-slate-700"><%= user.nama %></b>
+        <span class="ml-1 px-2 py-0.5 rounded-full text-xs <%= user.role==='admin' ? 'bg-brand-100 text-brand-700' : 'bg-blue-100 text-blue-700' %>"><%= user.role %></span>
+      </span>
+      <a href="/auth/logout" class="text-slate-500 hover:text-red-600">Keluar</a>
+    </div>
+  </div>
+</nav>
+
+<% if (typeof flash !== 'undefined' && flash) { %>
+  <div class="max-w-6xl mx-auto px-4 mt-4">
+    <div class="rounded-lg px-4 py-2 text-sm border <%= flash.type==='success' ? 'bg-brand-50 border-brand-200 text-brand-700' : 'bg-red-50 border-red-200 text-red-700' %>">
+      <%= flash.message %>
+    </div>
+  </div>
+<% } %>

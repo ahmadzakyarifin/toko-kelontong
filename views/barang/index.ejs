@@ -1,0 +1,54 @@
+<%- include('/partials/navbar.ejs') %>
+<main class="max-w-6xl mx-auto px-4 py-6">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-lg font-bold text-slate-800">📦 Data Barang</h1>
+    <% if (user.role === 'admin') { %>
+      <a href="/barang/create" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-3 py-2 rounded-lg">+ Tambah Barang</a>
+    <% } %>
+  </div>
+
+  <form method="GET" class="mb-4 flex gap-2">
+    <input name="search" value="<%= search %>" placeholder="Cari kode / nama..."
+      class="flex-1 rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+    <button class="bg-slate-700 hover:bg-slate-800 text-white px-4 rounded-lg text-sm">Cari</button>
+  </form>
+
+  <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50 text-slate-500">
+        <tr>
+          <th class="text-left px-4 py-3">Kode</th>
+          <th class="text-left px-4 py-3">Nama</th>
+          <th class="text-right px-4 py-3">Harga</th>
+          <th class="text-right px-4 py-3">Stok</th>
+          <th class="text-center px-4 py-3">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% if (rows.length === 0) { %>
+          <tr><td colspan="5" class="text-center text-slate-400 py-6">Belum ada data barang</td></tr>
+        <% } %>
+        <% rows.forEach(b => { %>
+          <tr class="hover:bg-slate-50">
+            <td class="px-4 py-3 font-mono text-xs text-slate-500"><%= b.kode %></td>
+            <td class="px-4 py-3 text-slate-700"><%= b.nama %></td>
+            <td class="px-4 py-3 text-right text-slate-700"><%= formatRupiah(b.harga) %></td>
+            <td class="px-4 py-3 text-right <%= b.stok <= b.stok_minimum ? 'text-amber-600 font-semibold' : 'text-slate-700' %>"><%= b.stok %> <%= b.satuan %></td>
+            <td class="px-4 py-3 text-center">
+              <% if (user.role === 'admin') { %>
+                <a href="/barang/<%= b.id %>/edit" class="text-blue-600 hover:underline text-xs mr-2">Edit</a>
+                <form method="POST" action="/barang/<%= b.id %>/delete" class="inline" onsubmit="return confirm('Hapus barang ini?')">
+                  <button class="text-red-600 hover:underline text-xs">Hapus</button>
+                </form>
+              <% } else { %}<span class="text-xs text-slate-300">readonly</span><% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="text-xs text-slate-400 mt-3">Total <%= total %> barang</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<%- include('layout.ejs') %>
+<div class="min-h-screen flex items-center justify-center px-4">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-600 text-white text-2xl shadow-lg">🛒</div>
+      <h1 class="mt-3 text-xl font-bold text-slate-800">Kasir Toko Kelontong</h1>
+      <p class="text-sm text-slate-500">Silakan login untuk melanjutkan</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+      <% if (error) { %>
+        <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2"><%= error %></div>
+      <% } %>
+      <form method="POST" action="/auth/login">
+        <label class="block text-sm font-medium text-slate-600 mb-1">Username</label>
+        <input name="username" value="<%= old.username || '' %>" autofocus
+          class="w-full rounded-lg border border-slate-300 px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="admin / kasir">
+        <label class="block text-sm font-medium text-slate-600 mb-1">Password</label>
+        <input name="password" type="password"
+          class="w-full rounded-lg border border-slate-300 px-3 py-2 mb-5 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="••••••">
+        <button class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg py-2 transition">Masuk</button>
+      </form>
+    </div>
+    <p class="text-center text-xs text-slate-400 mt-4">Demo &mdash; admin / admin123 &nbsp;|&nbsp; kasir / kasir123</p>
+  </div>
+</div>

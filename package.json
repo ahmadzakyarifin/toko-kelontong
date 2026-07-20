@@ -1,0 +1,37 @@
+{
+  "name": "kasir-toko-kelontong",
+  "version": "1.0.0",
+  "description": "Aplikasi Kasir Toko Kelontong (POS) - Express + EJS + Tailwind, MVC, MariaDB",
+  "main": "app.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "migrate": "node scripts/migrate.js",
+    "seed": "node scripts/seed.js",
+    "setup": "node scripts/migrate.js && node scripts/seed.js"
+  },
+  "keywords": [
+    "pos",
+    "kasir",
+    "express",
+    "ejs",
+    "tailwind",
+    "mariadb"
+  ],
+  "author": "Abang Zaky",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.1.0",
+    "mysql2": "^3.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

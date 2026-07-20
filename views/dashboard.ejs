@@ -1,0 +1,59 @@
+<%- include('/partials/navbar.ejs') %>
+<main class="max-w-6xl mx-auto px-4 py-6">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <a href="/transaksi" class="bg-white rounded-2xl border border-slate-200 p-5 hover:border-brand-500 transition">
+      <div class="text-2xl">🧾</div>
+      <div class="font-semibold mt-2 text-slate-800">Transaksi Baru</div>
+      <div class="text-xs text-slate-500">Proses penjualan & cetak struk</div>
+    </a>
+    <% if (user.role === 'admin') { %>
+      <a href="/barang" class="bg-white rounded-2xl border border-slate-200 p-5 hover:border-brand-500 transition">
+        <div class="text-2xl">📦</div>
+        <div class="font-semibold mt-2 text-slate-800">Data Barang</div>
+        <div class="text-xs text-slate-500">Kelola pencatatan barang</div>
+      </a>
+      <a href="/laporan" class="bg-white rounded-2xl border border-slate-200 p-5 hover:border-brand-500 transition">
+        <div class="text-2xl">📊</div>
+        <div class="font-semibold mt-2 text-slate-800">Laporan</div>
+        <div class="text-xs text-slate-500">Rekap penjualan harian</div>
+      </a>
+    <% } else { %>
+      <a href="/barang" class="bg-white rounded-2xl border border-slate-200 p-5 hover:border-brand-500 transition">
+        <div class="text-2xl">📦</div>
+        <div class="font-semibold mt-2 text-slate-800">Lihat Barang</div>
+        <div class="text-xs text-slate-500">Cek daftar & harga barang</div>
+      </a>
+      <div class="bg-white rounded-2xl border border-slate-200 p-5">
+        <div class="text-2xl">👋</div>
+        <div class="font-semibold mt-2 text-slate-800">Halo Kasir</div>
+        <div class="text-xs text-slate-500">Mulai transaksi di tombol kiri</div>
+      </div>
+    <% } %>
+  </div>
+
+  <% if (user.role === 'admin' && ringkasan) { %>
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="bg-brand-600 text-white rounded-2xl p-5">
+        <div class="text-sm opacity-90">Pendapatan Hari Ini</div>
+        <div class="text-2xl font-bold mt-1"><%= formatRupiah(ringkasan.total_pendapatan) %></div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-5">
+        <div class="text-sm text-slate-500">Transaksi Hari Ini</div>
+        <div class="text-2xl font-bold mt-1 text-slate-800"><%= ringkasan.jumlah_transaksi %></div>
+      </div>
+    </div>
+
+    <% if (stokMenipis.length > 0) { %>
+      <div class="bg-white rounded-2xl border border-amber-200 p-5">
+        <div class="font-semibold text-amber-700 mb-2">⚠️ Stok Menipis</div>
+        <ul class="text-sm text-slate-600 space-y-1">
+          <% stokMenipis.forEach(b => { %>
+            <li><%= b.nama %> &mdash; sisa <b><%= b.stok %> <%= b.satuan %></b> (min <%= b.stok_minimum %>)</li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+  <% } %>
+</main>
+</body>
+</html>

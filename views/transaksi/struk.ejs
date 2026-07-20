@@ -1,0 +1,31 @@
+<div class="max-w-sm mx-auto my-6 bg-white rounded-xl border border-slate-200 p-5 text-sm">
+  <div class="text-center mb-3">
+    <div class="font-bold text-base">TOKO KELONTONG MAKMUR</div>
+    <div class="text-xs text-slate-500">Jl. Contoh No. 123</div>
+    <div class="text-xs text-slate-500">Telp. 0812-xxxx-xxxx</div>
+  </div>
+  <hr>
+  <div class="my-2 text-xs text-slate-600">
+    <div>No: <%= header.kode %></div>
+    <div>Tgl: <%= new Date(header.created_at).toLocaleString('id-ID') %></div>
+  </div>
+  <hr>
+  <table class="w-full my-2">
+    <% detail.forEach(d => { %>
+      <tr>
+        <td class="py-0.5"><%= d.nama_barang %> <span class="text-slate-400">x<%= d.qty %></span></td>
+        <td class="py-0.5 text-right"><%= formatRupiah(d.subtotal) %></td>
+      </tr>
+    <% }) %>
+  </table>
+  <hr>
+  <div class="flex justify-between font-semibold mt-2"><span>Total</span><span><%= formatRupiah(header.total) %></span></div>
+  <div class="flex justify-between text-xs text-slate-600"><span>Bayar</span><span><%= formatRupiah(header.bayar) %></span></div>
+  <div class="flex justify-between text-xs text-slate-600"><span>Kembalian</span><span><%= formatRupiah(header.kembalian) %></span></div>
+  <hr>
+  <div class="text-center text-xs text-slate-400 mt-3">~ Terima Kasih ~</div>
+  <button onclick="window.print()" class="w-full mt-3 bg-brand-600 text-white rounded-lg py-2 text-sm">🖨️ Cetak Struk</button>
+  <a href="/transaksi" class="block text-center text-brand-600 text-sm mt-2 hover:underline">Transaksi Baru</a>
+</div>
+</body>
+</html>
