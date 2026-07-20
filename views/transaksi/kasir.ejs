@@ -62,6 +62,7 @@
       if (exist.qty + 1 > p.stok) { alert('Stok ' + p.nama + ' tidak cukup'); return; }
       exist.qty++;
     } else {
+      if (p.stok <= 0) { alert('Stok ' + p.nama + ' habis'); return; }
       cart.push({ ...p, qty: 1 });
     }
     render();
@@ -71,8 +72,13 @@
     const c = cart.find(x => x.id === id);
     if (!c) return;
     const baru = c.qty + delta;
-    const barang = JSON.parse(document.querySelector(`button[onclick*='"id":${id},']`).getAttribute('data-raw') || 'null');
-    c.qty = Math.max(1, baru);
+    // Validasi: tidak boleh kurang dari 1 dan tidak boleh melebihi stok
+    if (baru < 1) return;
+    if (baru > c.stok) {
+      alert('Stok ' + c.nama + ' tidak cukup (tersisa ' + c.stok + ')');
+      return;
+    }
+    c.qty = baru;
     render();
   }
 

@@ -27,16 +27,26 @@
       </div>
 
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-        <% if (error) { %>
-          <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2"><%= error %></div>
+        <% if (generalError) { %>
+          <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2"><%= generalError %></div>
         <% } %>
-        <form method="POST" action="/auth/login">
-          <label class="block text-sm font-medium text-slate-600 mb-1">Username</label>
-          <input name="username" value="<%= old.username || '' %>" autofocus
-            class="w-full rounded-lg border border-slate-300 px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="admin / kasir">
-          <label class="block text-sm font-medium text-slate-600 mb-1">Password</label>
-          <input name="password" type="password"
-            class="w-full rounded-lg border border-slate-300 px-3 py-2 mb-5 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="••••••">
+        <form method="POST" action="/auth/login" novalidate>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-slate-600 mb-1">Username</label>
+            <input name="username" value="<%= old.username || '' %>" autofocus
+              class="w-full rounded-lg border <%= errors.username ? 'border-red-400 ring-1 ring-red-400' : 'border-slate-300' %> px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="admin / kasir" required>
+            <% if (errors.username) { %>
+              <p class="text-red-500 text-xs mt-1"><%= errors.username %></p>
+            <% } %>
+          </div>
+          <div class="mb-5">
+            <label class="block text-sm font-medium text-slate-600 mb-1">Password</label>
+            <input name="password" type="password"
+              class="w-full rounded-lg border <%= errors.password ? 'border-red-400 ring-1 ring-red-400' : 'border-slate-300' %> px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="••••••" required>
+            <% if (errors.password) { %>
+              <p class="text-red-500 text-xs mt-1"><%= errors.password %></p>
+            <% } %>
+          </div>
           <button class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg py-2 transition">Masuk</button>
         </form>
       </div>

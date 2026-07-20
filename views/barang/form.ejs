@@ -2,47 +2,74 @@
 <main class="max-w-lg mx-auto px-4 py-6">
   <h1 class="text-lg font-bold text-slate-800 mb-4"><%= title %></h1>
 
-  <% if (error) { %>
-    <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2"><%= error %></div>
+  <% if (generalError) { %>
+    <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2"><%= generalError %></div>
   <% } %>
 
-  <form method="POST" action="<%= action %>" class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
-    <% if (barang.kode !== undefined) { %>
-      <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Kode</label>
-        <input name="kode" value="<%= barang.kode || '' %>" <%= barang.id ? 'readonly' : '' %>
-          class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono">
-      </div>
-    <% } %>
+  <form method="POST" action="<%= action %>" class="bg-white rounded-2xl border border-slate-200 p-5 space-y-4" novalidate>
+    <%/* Kode barang — tampil saat create, readonly saat edit */%>
     <div>
-      <label class="block text-sm font-medium text-slate-600 mb-1">Nama Barang</label>
+      <label class="block text-sm font-medium text-slate-600 mb-1">Kode <span class="text-red-400">*</span></label>
+      <input name="kode" value="<%= barang.kode || '' %>" <%= isEdit ? 'readonly' : '' %>
+        class="w-full rounded-lg border <%= errors.kode ? 'border-red-400 ring-1 ring-red-400' : 'border-slate-300' %> px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono <%= isEdit ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : '' %>"
+        placeholder="Contoh: BRG001" required>
+      <% if (errors.kode) { %>
+        <p class="text-red-500 text-xs mt-1"><%= errors.kode %></p>
+      <% } %>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-slate-600 mb-1">Nama Barang <span class="text-red-400">*</span></label>
       <input name="nama" value="<%= barang.nama || '' %>"
-        class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        class="w-full rounded-lg border <%= errors.nama ? 'border-red-400 ring-1 ring-red-400' : 'border-slate-300' %> px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+        placeholder="Masukkan nama barang" required>
+      <% if (errors.nama) { %>
+        <p class="text-red-500 text-xs mt-1"><%= errors.nama %></p>
+      <% } %>
     </div>
+
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Harga (Rp)</label>
+        <label class="block text-sm font-medium text-slate-600 mb-1">Harga (Rp) <span class="text-red-400">*</span></label>
         <input name="harga" type="number" min="0" step="0.01" value="<%= barang.harga != null ? barang.harga : '' %>"
-          class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          class="w-full rounded-lg border <%= errors.harga ? 'border-red-400 ring-1 ring-red-400' : 'border-slate-300' %> px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          placeholder="0" required>
+        <% if (errors.harga) { %>
+          <p class="text-red-500 text-xs mt-1"><%= errors.harga %></p>
+        <% } %>
       </div>
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Stok</label>
-        <input name="stok" type="number" min="0" value="<%= barang.stok != null ? barang.stok : 0 %>"
-          class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <label class="block text-sm font-medium text-slate-600 mb-1">Stok <span class="text-red-400">*</span></label>
+        <input name="stok" type="number" min="0" value="<%= barang.stok != null ? barang.stok : '' %>"
+          class="w-full rounded-lg border <%= errors.stok ? 'border-red-400 ring-1 ring-red-400' : 'border-slate-300' %> px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          placeholder="0" required>
+        <% if (errors.stok) { %>
+          <p class="text-red-500 text-xs mt-1"><%= errors.stok %></p>
+        <% } %>
       </div>
     </div>
+
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label class="block text-sm font-medium text-slate-600 mb-1">Satuan</label>
+        <label class="block text-sm font-medium text-slate-600 mb-1">Satuan <span class="text-red-400">*</span></label>
         <input name="satuan" value="<%= barang.satuan || 'pcs' %>"
-          class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          class="w-full rounded-lg border <%= errors.satuan ? 'border-red-400 ring-1 ring-red-400' : 'border-slate-300' %> px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          placeholder="pcs / kg / liter" required>
+        <% if (errors.satuan) { %>
+          <p class="text-red-500 text-xs mt-1"><%= errors.satuan %></p>
+        <% } %>
       </div>
       <div>
         <label class="block text-sm font-medium text-slate-600 mb-1">Stok Minimum</label>
         <input name="stok_minimum" type="number" min="0" value="<%= barang.stok_minimum != null ? barang.stok_minimum : 5 %>"
-          class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+          class="w-full rounded-lg border <%= errors.stok_minimum ? 'border-red-400 ring-1 ring-red-400' : 'border-slate-300' %> px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          placeholder="5">
+        <% if (errors.stok_minimum) { %>
+          <p class="text-red-500 text-xs mt-1"><%= errors.stok_minimum %></p>
+        <% } %>
       </div>
     </div>
+
     <div class="flex gap-2 pt-2">
       <button class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg py-2">Simpan</button>
       <a href="/barang" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50">Batal</a>

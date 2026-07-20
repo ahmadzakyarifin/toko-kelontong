@@ -4,17 +4,27 @@ const authService = require('./auth.service');
 
 const showLogin = (req, res) => {
   if (req.session.user) return res.redirect('/');
-  res.render('auth/login', { title: 'Login', error: null, old: {} });
+  res.render('auth/login', { title: 'Login', errors: {}, generalError: null, old: {} });
 };
 
 const doLogin = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    // Konversi array error express-validator ke object per-field
+    const fieldErrors = {};
+    const rawArray = errors.array();
+    for (let i = 0; i < rawArray.length; i++) {
+      const e = rawArray[i];
+      if (e.path && !fieldErrors[e.path]) {
+        fieldErrors[e.path] = e.msg;
+      }
+    }
     return res.status(400).render('auth/login', {
       title: 'Login',
-      error: errors.array().map(e => e.msg).join(', '),
+      errors: fieldErrors,
+      generalError: null,
       old: req.body,
-    }, { layout: false });
+    });
   }
   try {
     const user = await authService.login(req.body);
@@ -23,9 +33,10 @@ const doLogin = async (req, res) => {
   } catch (err) {
     return res.status(400).render('auth/login', {
       title: 'Login',
-      error: err.message,
+      errors: {},
+      generalError: err.message,
       old: req.body,
-    }, { layout: false });
+    });
   }
 };
 

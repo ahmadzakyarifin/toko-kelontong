@@ -14,3 +14,4 @@ router.post('/login',
 router.get('/logout', ctrl.logout);
 
 module.exports = router;
+

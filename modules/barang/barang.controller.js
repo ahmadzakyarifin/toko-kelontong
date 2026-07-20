@@ -20,18 +20,34 @@ const index = async (req, res) => {
 };
 
 const showCreate = (req, res) => {
-  res.render('barang/form', { title: 'Tambah Barang', barang: {}, error: null, action: '/barang', method: 'POST' });
+  res.render('barang/form', {
+    title: 'Tambah Barang',
+    barang: { kode: '', nama: '', harga: '', stok: 0, satuan: 'pcs', stok_minimum: 5 },
+    errors: {},
+    generalError: null,
+    action: '/barang',
+    method: 'POST',
+    isEdit: false,
+  });
 };
 
 const store = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    const fieldErrors = {};
+    errors.array().forEach(e => {
+      if (e.path && !fieldErrors[e.path]) {
+        fieldErrors[e.path] = e.msg;
+      }
+    });
     return res.status(400).render('barang/form', {
       title: 'Tambah Barang',
       barang: req.body,
-      error: errors.array().map(e => e.msg).join(', '),
+      errors: fieldErrors,
+      generalError: null,
       action: '/barang',
       method: 'POST',
+      isEdit: false,
     });
   }
   try {
@@ -42,9 +58,11 @@ const store = async (req, res) => {
     res.status(400).render('barang/form', {
       title: 'Tambah Barang',
       barang: req.body,
-      error: err.message,
+      errors: {},
+      generalError: err.message,
       action: '/barang',
       method: 'POST',
+      isEdit: false,
     });
   }
 };
@@ -52,7 +70,15 @@ const store = async (req, res) => {
 const showEdit = async (req, res) => {
   try {
     const barang = await barangService.get(req.params.id);
-    res.render('barang/form', { title: 'Edit Barang', barang, error: null, action: `/barang/${barang.id}?_method=PUT`, method: 'POST' });
+    res.render('barang/form', {
+      title: 'Edit Barang',
+      barang,
+      errors: {},
+      generalError: null,
+      action: `/barang/${barang.id}?_method=PUT`,
+      method: 'POST',
+      isEdit: true,
+    });
   } catch (err) {
     res.status(404).render('error', { title: 'Error', message: err.message });
   }
@@ -61,12 +87,20 @@ const showEdit = async (req, res) => {
 const update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    const fieldErrors = {};
+    errors.array().forEach(e => {
+      if (e.path && !fieldErrors[e.path]) {
+        fieldErrors[e.path] = e.msg;
+      }
+    });
     return res.status(400).render('barang/form', {
       title: 'Edit Barang',
       barang: { ...req.body, id: req.params.id },
-      error: errors.array().map(e => e.msg).join(', '),
+      errors: fieldErrors,
+      generalError: null,
       action: `/barang/${req.params.id}?_method=PUT`,
       method: 'POST',
+      isEdit: true,
     });
   }
   try {
@@ -77,9 +111,11 @@ const update = async (req, res) => {
     res.status(400).render('barang/form', {
       title: 'Edit Barang',
       barang: { ...req.body, id: req.params.id },
-      error: err.message,
+      errors: {},
+      generalError: err.message,
       action: `/barang/${req.params.id}?_method=PUT`,
       method: 'POST',
+      isEdit: true,
     });
   }
 };
