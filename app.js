@@ -6,12 +6,9 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// ---------- View engine: EJS + Layout ----------
-const expressLayouts = require('express-ejs-layouts');
-app.use(expressLayouts);
+// ---------- View engine: EJS ----------
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.set('layout', 'layout'); // layout.ejs membungkus semua view, <%- body %> terisi otomatis
 
 // ---------- Middleware ----------
 app.use(express.urlencoded({ extended: true }));

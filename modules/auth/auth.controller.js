@@ -4,7 +4,7 @@ const authService = require('./auth.service');
 
 const showLogin = (req, res) => {
   if (req.session.user) return res.redirect('/');
-  res.render('auth/login', { title: 'Login', error: null, old: {}, layout: false });
+  res.render('auth/login', { title: 'Login', error: null, old: {} });
 };
 
 const doLogin = async (req, res) => {
